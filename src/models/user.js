@@ -60,7 +60,9 @@ const userSchema = mongoose.Schema(
   }
 );
 
-// arroe function wont work
+userSchema.index({firstName: 1, lastName: 1});
+
+// arrow function wont work
 userSchema.methods.getJWT = async function () {
   const user = this;
 
