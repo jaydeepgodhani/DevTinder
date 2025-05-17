@@ -22,7 +22,6 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
     }
     const loggedInUser = req.user;
     Object.keys(req.body).forEach((key) => (loggedInUser[key] = req.body[key]));
-    console.log(loggedInUser);
 
     await loggedInUser.save();
     res.json({
@@ -42,7 +41,6 @@ profileRouter.patch("/profile/password", userAuth, async (req, res) => {
     }
     const loggedInUser = req.user;
     const newPasswordIsValid = true;
-    console.log(loggedInUser);
 
     if(newPasswordIsValid) {
       const passwordHash = await bcrypt.hash(req.body.password, 10);
