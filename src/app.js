@@ -5,6 +5,8 @@ const app = express();
 const User = require("./models/user");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const http = require('http');
+require('./utils/cronjob');
 
 // this is middleware provided by express by default to get json data
 app.use(
@@ -20,11 +22,14 @@ const authRouter = require("./routes/auth");
 const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/requests");
 const userRouter = require("./routes/user");
+const initializeSocket = require("./utils/socket");
+const chatRouter = require("./routes/chat");
 
 app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);
 app.use("/", userRouter);
+app.use("/", chatRouter);
 
 app.get("/user", async (req, res) => {
   const email = req.body.emailId;
@@ -90,11 +95,14 @@ app.patch("/user/:userId", async (req, res) => {
   }
 });
 
+const server = http.createServer(app);
+initializeSocket(server);
+
 connectDb()
   .then(() => {
     console.log("db connected !!");
 
-    app.listen(7777, () => {
+    server.listen(7777, () => {
       console.log("server running ...");
     });
   })
